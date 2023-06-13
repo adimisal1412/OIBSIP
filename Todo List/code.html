@@ -1,0 +1,199 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>To-Do App</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css">
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background: linear-gradient(to bottom, #333, #000);
+      color: #fff;
+      margin: 0;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      height: 100vh;
+    }
+
+    .todo-container {
+      max-width: 400px;
+      padding: 20px;
+      background: rgba(0, 0, 0, 0.7);
+      border-radius: 5px;
+      text-align: center;
+    }
+
+    h1 {
+      margin-top: 0;
+    }
+
+    .todo-input {
+      width: 100%;
+      padding: 12px;
+      font-size: 16px;
+      border: none;
+      margin-bottom: 10px;
+      border-radius: 3px;
+      text-align: center;
+      box-sizing: border-box;
+    }
+
+    .todo-list {
+      margin-bottom: 20px;
+    }
+
+    .todo-item {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 10px;
+      padding: 10px;
+      border-radius: 3px;
+      background-color: #fff;
+      color: #000;
+    }
+
+    .todo-item.completed {
+      background-color: #78c478;
+    }
+
+    .todo-item .task {
+      flex-grow: 1;
+      text-align: left;
+      margin-right: 10px; /* Add a right margin */
+    }
+
+    .todo-item .timestamp {
+      font-size: 14px;
+      color: #777;
+      margin-left: 10px; /* Add a left margin */
+    }
+
+    .todo-item .action-button {
+      background-color: transparent;
+      border: none;
+      cursor: pointer;
+      font-size: 16px;
+      color: #888;
+      padding: 5px;
+    }
+
+    .todo-item .action-button:hover {
+      color: #fff;
+    }
+
+    .error-message {
+      color: #ff0000;
+      font-size: 14px;
+      margin-top: 5px;
+    }
+
+    .reset-button {
+      background-color: #f44336;
+      color: white;
+      border: none;
+      padding: 10px 20px;
+      cursor: pointer;
+      border-radius: 3px;
+      margin-top: 20px;
+      font-size: 14px;
+    }
+  </style>
+</head>
+<body>
+  <div class="todo-container">
+    <h1>To-Do App</h1>
+    <div>
+      <input type="text" class="todo-input" id="taskInput" placeholder="Enter a task" onkeydown="handleKeyPress(event)">
+    </div>
+    <div>
+      <input type="date" class="todo-input" id="dateInput">
+    </div>
+    <button onclick="addTask()">Add Task</button>
+    <div id="error" class="error-message"></div>
+    <div class="todo-list" id="pendingTasks">
+      <h2>Pending Tasks</h2>
+    </div>
+    <div class="todo-list" id="completedTasks">
+      <h2>Completed Tasks</h2>
+    </div>
+
+    <button class="reset-button" onclick="resetTasks()">Reset All</button>
+  </div>
+
+  <script>
+    function addTask() {
+      var taskInput = document.getElementById("taskInput");
+      var dateInput = document.getElementById("dateInput");
+      var errorDiv = document.getElementById("error");
+
+      var task = taskInput.value.trim();
+      var date = dateInput.value;
+
+      // Validate task input
+      if (task === "") {
+        errorDiv.textContent = "Please enter a task.";
+        return;
+      }
+
+      // Validate date input
+      if (date === "") {
+        errorDiv.textContent = "Please select a date.";
+        return;
+      }
+
+      errorDiv.textContent = ""; // Clear error message
+
+      // Create a new task item
+      var taskItem = document.createElement("div");
+      taskItem.className = "todo-item";
+      taskItem.innerHTML = '<div class="task">' + task + '</div>' +
+        '<div class="timestamp">' + formatDate(date) + '</div>' +
+        '<button onclick="deleteTask(this.parentNode)" class="action-button"><i class="fas fa-trash"></i></button>' +
+        '<button onclick="markComplete(this.parentNode)" class="action-button"><i class="fas fa-check"></i></button>';
+
+      // Add the task item to the pending tasks list
+      var pendingTasks = document.getElementById("pendingTasks");
+      pendingTasks.appendChild(taskItem);
+
+      // Clear the input fields
+      taskInput.value = "";
+      dateInput.value = "";
+    }
+
+    function deleteTask(taskItem) {
+      // Remove the task item from the pending tasks list
+      var parentList = taskItem.parentNode;
+      parentList.removeChild(taskItem);
+    }
+
+    function markComplete(taskItem) {
+      // Move the task item to the completed tasks list
+      var pendingTasks = document.getElementById("pendingTasks");
+      var completedTasks = document.getElementById("completedTasks");
+      taskItem.removeChild(taskItem.lastChild); // Remove the "Mark Complete" button
+      completedTasks.appendChild(taskItem);
+      taskItem.classList.add("completed");
+    }
+
+    function resetTasks() {
+      var pendingTasks = document.getElementById("pendingTasks");
+      var completedTasks = document.getElementById("completedTasks");
+      pendingTasks.innerHTML = "<h2>Pending Tasks</h2>";
+      completedTasks.innerHTML = "<h2>Completed Tasks</h2>";
+    }
+
+    function handleKeyPress(event) {
+      if (event.key === "Enter") {
+        addTask();
+      }
+    }
+
+    function formatDate(dateString) {
+      var date = new Date(dateString);
+      var options = { year: 'numeric', month: 'long', day: 'numeric' };
+      return date.toLocaleDateString(undefined, options);
+    }
+  </script>
+</body>
+</html>
