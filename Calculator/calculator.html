@@ -1,0 +1,167 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>Interactive Calculator</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: rgb(30, 51, 69);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            height: 100vh;
+        }
+
+        .calculator {
+            position: relative;
+            max-width: 300px;
+            margin: 0 auto;
+            padding: 20px;
+            background-color: #f2f2f2;
+            border-radius: 5px;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+        }
+
+        .calculator-heading {
+            font-family: 'Gill Sans', 'Gill Sans MT';
+            position: absolute;
+            top: -40px;
+            left: 0;
+            right: 0;
+            margin: 0 auto;
+            text-align: center;
+            font-size: 24px;
+            color: white;
+            z-index: 1;
+        }
+
+        .calculator input {
+            width: 100%;
+            margin: 0 auto;
+            display: block;
+            text-align: right;
+            margin-bottom: 10px;
+            padding: 10px;
+            font-size: 18px;
+            border-radius: 3px;
+            border: 1px solid #ccc;
+            box-sizing: border-box;
+            /* Add this line */
+            overflow: hidden;
+            /* Add this line */
+        }
+
+        .calculator .buttons {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            grid-gap: 5px;
+        }
+
+        .calculator .button {
+            padding: 10px;
+            font-size: 18px;
+            text-align: center;
+            border-radius: 3px;
+            cursor: pointer;
+        }
+
+        .calculator .number {
+            background-color: lightblue;
+        }
+
+        .calculator .operator {
+            background-color: skyblue;
+        }
+
+        .calculator .parentheses {
+            background-color: #d3d3d3;
+        }
+
+        .calculator .special {
+            background-color: #f0e68c;
+        }
+
+        .calculator .button:hover {
+            background-color: #e6e6e6;
+        }
+
+        .calculator .button.operator:hover {
+            background-color: #bfbfbf;
+        }
+
+        .calculator .button.double {
+            grid-column: span 2;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="calculator">
+        <h1 class="calculator-heading">Calculator</h1>
+        <input type="text" id="result" disabled>
+        <div class="buttons">
+            <div class="button parentheses" onclick="appendToResult('(')">(</div>
+            <div class="button parentheses" onclick="appendToResult(')')">)</div>
+            <div class="button special" onclick="deleteLastCharacter()">Del</div>
+            <div class="button special" onclick="clearResult()">Clear</div>
+            <div class="button number" onclick="appendToResult('7')">7</div>
+            <div class="button number" onclick="appendToResult('8')">8</div>
+            <div class="button number" onclick="appendToResult('9')">9</div>
+            <div class="button operator" onclick="appendToResult('/')">/</div>
+            <div class="button number" onclick="appendToResult('4')">4</div>
+            <div class="button number" onclick="appendToResult('5')">5</div>
+            <div class="button number" onclick="appendToResult('6')">6</div>
+            <div class="button operator" onclick="appendToResult('*')">x</div>
+            <div class="button number" onclick="appendToResult('1')">1</div>
+            <div class="button number" onclick="appendToResult('2')">2</div>
+            <div class="button number" onclick="appendToResult('3')">3</div>
+            <div class="button operator" onclick="appendToResult('-')">-</div>
+            <div class="button number" onclick="appendToResult('.')">.</div>
+            <div class="button operator" onclick="appendToResult('0')">0</div>
+            <div class="button special" onclick="togglePlusMinus()">±</div>
+            <div class="button operator" onclick="appendToResult('+')">+</div>
+            <div class="button special" onclick="appendToResult('ans')">ans</div>
+            <div class="button operator" onclick="appendToResult('Math.sqrt(')">√</div>
+            <div class="button operator double" onclick="calculateResult()">=</div>
+        </div>
+    </div>
+
+    <script>
+        function appendToResult(value) {
+            var resultInput = document.getElementById("result");
+            resultInput.value += value;
+        }
+
+        function deleteLastCharacter() {
+            var resultInput = document.getElementById("result");
+            resultInput.value = resultInput.value.slice(0, -1);
+        }
+
+        function clearResult() {
+            var resultInput = document.getElementById("result");
+            resultInput.value = "";
+        }
+
+        function calculateResult() {
+            var resultInput = document.getElementById("result");
+            try {
+                var result = eval(resultInput.value);
+                resultInput.value = result;
+            } catch (error) {
+                resultInput.value = "Error";
+            }
+        }
+
+        function togglePlusMinus() {
+            var resultInput = document.getElementById("result");
+            if (resultInput.value.charAt(0) === "-") {
+                resultInput.value = resultInput.value.slice(1);
+            } else {
+                resultInput.value = "-" + resultInput.value;
+            }
+        }
+    </script>
+</body>
+
+</html>
